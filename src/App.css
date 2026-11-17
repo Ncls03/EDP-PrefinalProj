@@ -1,5 +1,4 @@
 
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -8,6 +7,57 @@
 
 
 
+#root {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  background-color: #4a4a77;
+}
+
+.wordle-row {
+  display: flex;
+  gap: 8px;
+}
+
+.tile {
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: transparent;
+  color: #ffffff; /* Text color inside the tile */
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  outline: none;
+}
+
+tile:focus {
+  border-color: #565758;
+}
+
+.tile:disabled {
+  background-color: #121213;
+}
+
+/* Wordle feedback colors */
+.tile.green {
+  background-color: #538d4e;
+  border-color: #538d4e;
+}
+
+.tile.yellow {
+  background-color: #b59f3b;
+  border-color: #b59f3b;
+}
+
+.tile.gray {
+  background-color: #3a3a3c;
+  border-color: #3a3a3c;
+}
 
 
 
@@ -19,3 +69,4 @@
     transform: rotate(360deg);
   }
 }
+
