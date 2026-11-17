@@ -1,125 +1,163 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap');
-
-:root {
-  --sage: #b5d394;
-  --cream: #fff7ec;
-  --pink: #f78eaf;
-  --deep-green: #3f6d30;
-  --gold: #efb300;
-  --gray: #858585;
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
-* { box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
 
-html, body, #root {
+ body {
   margin: 0;
-  min-height: 100%;
-  width: 100%;
+  padding: 0;
+  background-color: #b5d394;
 }
-
-body {
-  font-family: 'Fredoka', sans-serif;
-  background: var(--sage);
-}
-
-.game-page {
-  position: relative;
+#root {
+  flex-direction: column;
+  margin: auto;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 35px 18px 35px;
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--sage);
+  justify-content: center; 
+  align-items: center;     
+  background-color: #b5d394;
+}
+
+.wordle-row {
+  display: flex;
+  gap: 9px;
 }
 
 .wordle-board {
-  position: relative;
-  z-index: 2;
+  display: flex;
+  font-family: 'Fredoka', sans-serif;;
+  flex-direction: column;
+  font-size: 20rem;
+  font-weight: 700;
+  color: #f1dee7;
+  text-shadow: 2px 2px 0px #8da96f;
+  gap: 10px;
+  align-items: center; 
+  justify-content: center; 
+  margin-top: 10px; 
+}
+
+.wordle-board h1 {
+  letter-spacing: 2px;
+  font-size: 5rem;
+  margin-bottom: 5px;
+}
+
+.tile {
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: #faf5e4;
+  color: #5c7344;
+  border: 3px solid #f8a5c2;
+  border-radius: 10px;
+  outline: none;
+}
+
+.tile:focus {
+  border-color: #e87a9f;
+}
+
+.tile:disabled {
+  background-color: #faf5e4;
+}
+
+.tile.green {
+  background-color: #6a994e;
+  border-color: #6a994e;
+  color: #ffffff;
+}
+
+.tile.yellow {
+  background-color: #e0b13b;
+  border-color: #e0b13b;
+  color: #ffffff;
+}
+
+.tile.gray {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  color: #ffffff;
+}
+
+/* On-screen Keyboard Styles */
+.keyboard {
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: max-content;
-  max-width: 100%;
-  font-family: 'Fredoka', sans-serif;
 }
 
-.wordle-board h1 {
-  margin: 0 0 8px;
-  color: #fff4f9;
-  font-family: 'Fredoka', sans-serif;
-  font-size: clamp(2.7rem, 5.3vw, 5rem);
-  font-weight: 700;
-  line-height: 1.13;
-  letter-spacing: .5px;
-  text-shadow: 2px 2px 0 #e88bae, 4px 5px 0 #769c66;
-  white-space: nowrap;
-}
-
-.wordle-row { display: flex; justify-content: center; gap: 8px; }
-
-.tile {
-  width: 68px;
-  height: 64px;
-  padding: 0;
-  border: 2px solid #f2a4be;
-  border-radius: 10px;
-  background: var(--cream);
-  color: var(--deep-green);
-  font: 700 2rem 'Fredoka', sans-serif;
-  text-align: center;
-  text-transform: uppercase;
-  box-shadow: 0 3px 0 rgba(74, 91, 58, .14);
-  outline: none;
-  caret-color: transparent;
-}
-.tile:focus { border-color: #e779a0; }
-.tile:disabled { opacity: 1; -webkit-text-fill-color: currentColor; }
-.tile.green, .key.green { background: #3e762f; border-color: #3e762f; color: white; }
-.tile.yellow, .key.yellow { background: var(--gold); border-color: var(--gold); color: white; }
-.tile.gray, .key.gray { background: var(--gray); border-color: var(--gray); color: white; }
-
-.keyboard {
+.keyboard-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin-top: 19px;
+  gap: 8px;
 }
-.keyboard-row { display: flex; justify-content: center; gap: 6px; }
+
 .key {
-  height: 52px;
-  min-width: 55px;
-  padding: 0 10px;
-  border: 2px solid #e9a6b3;
-  border-radius: 9px;
-  background: var(--cream);
-  color: var(--deep-green);
-  font: 700 1.05rem 'Fredoka', sans-serif;
-  box-shadow: 0 3px 0 rgba(60, 79, 53, .12);
+  height: 50px;
+  min-width: 48px;
+  padding: 0 8px;
+  border-radius: 50px;
+  border: 2px solid #f8a5c2;
+  background-color: #faf5e4;
+  color: #5c7344;
+  font-weight: bold;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: transform .12s, background-color .15s;
+  transition: all 0.2s;
 }
-.key:hover { transform: translateY(-2px); }
-.key:active { transform: translateY(1px); }
-.key.gray { opacity: 1; }
-.key.special-key { min-width: 85px; font-size: .9rem; }
+
+.key:hover {
+  background-color: #f8a5c2;
+  color: #ffffff;
+}
+
+.special-key {
+  min-width: 60px;
+  font-size: 0.75rem;
+}
+
+.key.green {
+  background-color: #6a994e;
+  border-color: #6a994e;
+  color: #ffffff;
+}
+
+.key.yellow {
+  background-color: #e0b13b;
+  border-color: #e0b13b;
+  color: #ffffff;
+}
+
+.key.gray {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  color: #ffffff;
+  opacity: 0.75;
+}
 
 .new-game-btn {
-  margin-top: 16px;
-  min-width: 212px;
-  padding: 13px 28px;
-  border: 2px solid #ffe5ee;
-  border-radius: 13px;
-  background: #f58db1;
-  color: white;
-  font: 700 1.1rem 'Fredoka', sans-serif;
-  box-shadow: 0 4px 0 rgba(100, 103, 77, .20);
+  margin-top: 12px;
+  padding: 10px 22px;
+  background-color: #f8a5c2;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 2px solid #faf5e4;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
-.new-game-btn:hover { background: #e8779f; }
+
+.new-game-btn:hover {
+  background-color: #e87a9f;
+}
 
 /* Falling sprites are visual only; they never intercept game input. */
 .cat-rain {
