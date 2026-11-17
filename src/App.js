@@ -251,7 +251,6 @@ function App() {
         ))}
       </div>
 
-      {/* New Game Button */}
       <button className="new-game-btn" onClick={resetGame}>
         New Game
       </button>
