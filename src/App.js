@@ -9,7 +9,8 @@ function getRandomWord() {
 }
 
 function App() {
-  const [secretWord] = useState(() => getRandomWord());
+  // Added setSecretWord so we can pick a new word on reset
+  const [secretWord, setSecretWord] = useState(() => getRandomWord());
   
   const [guesses, setGuesses] = useState(
     Array(6).fill("").map(() => Array(5).fill(""))
@@ -21,6 +22,15 @@ function App() {
   
   const [currentRow, setCurrentRow] = useState(0);
   const [currentCol, setCurrentCol] = useState(0);
+
+  // Resets all states for a fresh game
+  const handleNewGame = () => {
+    setSecretWord(getRandomWord());
+    setGuesses(Array(6).fill("").map(() => Array(5).fill("")));
+    setColors(Array(6).fill("").map(() => Array(5).fill("")));
+    setCurrentRow(0);
+    setCurrentCol(0);
+  };
 
   const handleChange = (e, row, col) => {
     if (row !== currentRow) return;
@@ -101,8 +111,6 @@ function App() {
             const isCurrentFocus = rowIndex === currentRow && colIndex === currentCol;
             const tileColor = colors[rowIndex][colIndex];
 
-            
-            
             return (
               <input
                 key={colIndex}
@@ -119,15 +127,16 @@ function App() {
                   }
                 }}
               />
-              
             );
           })}     
         </div>
       ))} 
+
+      <button className="new-game-btn" onClick={handleNewGame}>
+        New Game
+      </button>
     </div> 
-    
   );
- 
 } 
 
 export default App;
