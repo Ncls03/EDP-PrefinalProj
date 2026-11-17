@@ -1,7 +1,7 @@
 import './App.css';
 import { useState } from 'react';
 
-const WORD_LIST = ["CRANE", "APPLE", "BRAVE", "HOUSE", "PLANT", "SMART", "TRAIN", "WATER"];
+const WORD_LIST = ["CRANE", "BLUSH", "BRAVE", "FLAME", "DRIED", "SPINE", "TRAIN", "SLIME", "PRIDE", "GREED", "DREAD"];
 
 function getRandomWord() {
   const randomIndex = Math.floor(Math.random() * WORD_LIST.length);
@@ -9,15 +9,12 @@ function getRandomWord() {
 }
 
 function App() {
-  // Use secretWord to check guesses
   const [secretWord] = useState(() => getRandomWord());
   
-  // 6 rows, each containing 5 empty strings
   const [guesses, setGuesses] = useState(
     Array(6).fill("").map(() => Array(5).fill(""))
   );
   
-  // Track colors for each tile: "green", "yellow", "gray", or ""
   const [colors, setColors] = useState(
     Array(6).fill("").map(() => Array(5).fill(""))
   );
@@ -53,16 +50,13 @@ function App() {
         setCurrentCol(col - 1);
       }
     } else if (e.key === "Enter") {
-      // Check if the row is full (5 letters)
       if (col === 4 && newGuesses[row][4] !== "") {
         const guessWord = newGuesses[row].join("");
         
-        // Calculate colors (Green, Yellow, Gray)
         const newColors = [...colors.map(r => [...r])];
         const secretLetters = secretWord.split("");
         const guessLetters = guessWord.split("");
         
-        // 1st pass: Greens
         for (let i = 0; i < 5; i++) {
           if (guessLetters[i] === secretLetters[i]) {
             newColors[row][i] = "green";
@@ -71,7 +65,6 @@ function App() {
           }
         }
 
-        // 2nd pass: Yellows and Grays
         for (let i = 0; i < 5; i++) {
           if (guessLetters[i] !== null) {
             const index = secretLetters.indexOf(guessLetters[i]);
@@ -85,9 +78,8 @@ function App() {
         }
         setColors(newColors);
 
-        // Win/Loss check
         if (guessWord === secretWord) {
-          alert("🎉 You Win!");
+          alert("You guessed the word!");
           return;
         } else if (currentRow === 5) {
           alert(`Game Over! The word was ${secretWord}`);
@@ -102,6 +94,7 @@ function App() {
 
   return (
     <div className="wordle-board">
+      <h1>Wordle Game</h1>
       {guesses.map((rowValues, rowIndex) => (
         <div className="wordle-row" key={rowIndex}>
           {rowValues.map((letter, colIndex) => {
