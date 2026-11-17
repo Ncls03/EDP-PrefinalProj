@@ -1,6 +1,22 @@
 import './App.css';
 import { useState } from 'react';
 
+// Static positions keep the sprites from jumping when the game re-renders.
+const SPRITES = ["head-0-0", "head-0-1", "head-0-2", "head-0-4", "head-1-1", "head-1-2", "head-1-3", "head-2-0", "head-2-4", "head-2-5", "head-2-6", "head-2-7", "paw-3-4", "paw-3-5", "paw-4-4", "paw-4-5", "paw-5-4", "paw-5-6"];
+
+// Spaced across the scene so the game stays readable. Negative delays
+// make some sprites already visible as soon as the page loads.
+const FALLING_CATS = Array.from({ length: 30 }, (_, i) => ({
+  id: i,
+  sprite: SPRITES[(i * 7 + Math.floor(i / 4)) % SPRITES.length],
+  left: `${[4, 19, 30, 72, 88, 94, 12, 26, 79, 98, 5, 86, 21, 92, 14, 81, 36, 65, 7, 94, 24, 76, 2, 88, 16, 95, 31, 69, 8, 83][i]}%`,
+  delay: `${-(i * 3.41 % 28)}s`,
+  duration: `${17 + (i * 5.3 % 13)}s`,
+  size: `${i % 3 === 0 ? 77 : i % 3 === 1 ? 61 : 46}px`,
+  drift: `${((i % 2) ? -1 : 1) * (18 + (i * 11) % 50)}px`,
+  rotate: `${((i % 2) ? -1 : 1) * (5 + i % 11)}deg`,
+}));
+
 const WORD_LIST = ["CRANE", "BLUSH", "BRAVE", "FLAME", "DRIED", "SPINE", "TRAIN", "SLIME", "PRIDE", "GREED", "DREAD"];
 
 function getRandomWord() {
@@ -28,6 +44,7 @@ function App() {
   const [currentRow, setCurrentRow] = useState(0);
   const [currentCol, setCurrentCol] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [showCats, setShowCats] = useState(true);
 
   // Function to reset everything for a new game
   const resetGame = () => {
@@ -151,7 +168,40 @@ function App() {
   };
 
   return (
-    <div className="wordle-board">
+    <div className="game-page">
+      <label className="cat-toggle">
+        <span>Animated Cats</span>
+        <input
+          type="checkbox"
+          checked={showCats}
+          onChange={(event) => setShowCats(event.target.checked)}
+          aria-label="Show animated falling cats"
+        />
+        <span className="cat-toggle-track" aria-hidden="true" />
+      </label>
+
+      {showCats && (
+        <div className="cat-rain" aria-hidden="true">
+          {FALLING_CATS.map((cat) => (
+            <img
+              key={cat.id}
+              src={`/pixel-cats/${cat.sprite}.png`}
+              alt=""
+              draggable="false"
+              className="falling-cat"
+              style={{
+                left: cat.left,
+                animationDelay: cat.delay,
+                animationDuration: cat.duration,
+                width: cat.size,
+                '--drift': cat.drift,
+                '--rotate': cat.rotate,
+              }}
+            />
+          ))}
+        </div>
+      )}
+      <main className="wordle-board">
       <h1>Wordle Game</h1>
       {guesses.map((rowValues, rowIndex) => (
         <div className="wordle-row" key={rowIndex}>
@@ -205,7 +255,8 @@ function App() {
       <button className="new-game-btn" onClick={resetGame}>
         New Game
       </button>
-    </div> 
+      </main>
+    </div>
   );
 } 
 
