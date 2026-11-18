@@ -1,11 +1,8 @@
 import './App.css';
 import { useState } from 'react';
+import words from 'an-array-of-english-words';
 
-// Static positions keep the sprites from jumping when the game re-renders.
 const SPRITES = ["head-0-0", "head-0-1", "head-0-2", "head-0-4", "head-1-1", "head-1-2", "head-1-3", "head-2-0", "head-2-4", "head-2-5", "head-2-6", "head-2-7", "paw-3-4", "paw-3-5", "paw-4-4", "paw-4-5", "paw-5-4", "paw-5-6"];
-
-// Spaced across the scene so the game stays readable. Negative delays
-// make some sprites already visible as soon as the page loads.
 const FALLING_CATS = Array.from({ length: 30 }, (_, i) => ({
   id: i,
   sprite: SPRITES[(i * 7 + Math.floor(i / 4)) % SPRITES.length],
@@ -18,7 +15,6 @@ const FALLING_CATS = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const WORD_LIST = ["CRANE", "BLUSH", "BRAVE", "FLAME", "DRIED", "SPINE", "TRAIN", "SLIME", "PRIDE", "GREED", "DREAD"];
-
 function getRandomWord() {
   const randomIndex = Math.floor(Math.random() * WORD_LIST.length);
   return WORD_LIST[randomIndex];
@@ -30,9 +26,11 @@ const ROWS = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACKSPACE']
 ];
 
+const VALID_WORDS = new Set(
+  words.filter((word) => word.length === 5).map((word) => word.toUpperCase())
+);
 function App() {
   const [secretWord, setSecretWord] = useState(() => getRandomWord());
-  
   const [guesses, setGuesses] = useState(
     Array(6).fill("").map(() => Array(5).fill(""))
   );
@@ -46,7 +44,6 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [showCats, setShowCats] = useState(true);
 
-  // Function to reset everything for a new game
   const resetGame = () => {
     setSecretWord(getRandomWord());
     setGuesses(Array(6).fill("").map(() => Array(5).fill("")));
@@ -55,6 +52,7 @@ function App() {
     setCurrentCol(0);
     setGameOver(false);
   };
+
 
   const getLetterStatuses = () => {
     const statuses = {};
@@ -75,9 +73,10 @@ function App() {
     }
     return statuses;
   };
-
+  
   const letterStatuses = getLetterStatuses();
 
+    
   const handleKeyInput = (key) => {
     if (gameOver) return;
 
@@ -92,9 +91,13 @@ function App() {
         setGuesses(newGuesses);
         setCurrentCol(currentCol - 1);
       }
-    } else if (key === "ENTER") {
+   } else if (key === "ENTER") {
       if (currentCol === 4 && newGuesses[currentRow][4] !== "") {
         const guessWord = newGuesses[currentRow].join("");
+        if (!VALID_WORDS.has(guessWord)) {
+          alert("Not in word list!");
+          return;
+        }
         
         const newColors = [...colors.map(r => [...r])];
         const secretLetters = secretWord.split("");
